@@ -141,7 +141,7 @@ export async function $onEmit(context: EmitContext<PythonEmitterOptions>) {
         "setuptools",
       ]);
       await micropip.install(
-        "https://github.com/YalinLi0312/typespec/releases/download/pygen%40v0.1.0/pygen-0.1.0-py3-none-any.whl",
+        "emfs:generator/dist/pygen-0.1.0-py3-none-any.whl",
       );
       const globals = pyodide.toPy({ outputFolder, yamlPath, commandArgs });
       const python = `
@@ -162,10 +162,8 @@ export async function $onEmit(context: EmitContext<PythonEmitterOptions>) {
     }
   } else {
     let venvPath = path.join(root, "venv");
-    if (!fs.existsSync(path.join(venvPath))) {
-      await runPython3("./eng/scripts/setup/install.py");
-      await runPython3("./eng/scripts/setup/prepare.py");
-    }
+    await runPython3("./eng/scripts/setup/install.py");
+    await runPython3("./eng/scripts/setup/prepare.py");
     if (fs.existsSync(path.join(venvPath, "bin"))) {
       venvPath = path.join(venvPath, "bin", "python");
     } else if (fs.existsSync(path.join(venvPath, "Scripts"))) {
